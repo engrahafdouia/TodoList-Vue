@@ -40,11 +40,12 @@
                 <todo-item
                   v-for="(todo, index) in filteredList"
                   :key="todo.id"
-                 :todo="todo" :index="index" @removeTodo="removeTodo" @finishedEdit="finishedEdit"
-                :checkAll="!anyRemaining"
+                  :todo="todo"
+                  :index="index"
+                  @removeTodo="removeTodo"
+                  @finishedEdit="finishedEdit"
+                  :checkAll="!anyRemaining"
                 >
-
-
                 </todo-item>
 
                 <div class="extra-container">
@@ -69,7 +70,8 @@
 
                   <div>
                     <transition name="fade">
-                      <v-btn class="error"
+                      <v-btn
+                        class="error"
                         v-if="showClearCompletedButton"
                         @click="clearCompleted"
                       >
@@ -219,9 +221,8 @@ export default {
     clearCompleted() {
       this.todos = this.todos.filter((todo) => !todo.completed);
     },
-    finishedEdit(data){
-      this.todos.splice(data.index, 1 ,data.todo);
-
+    finishedEdit(data) {
+      this.todos.splice(data.index, 1, data.todo);
     },
     // addToList() {
     //   if (this.Name === '' ) {

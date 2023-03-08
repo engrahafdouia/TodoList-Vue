@@ -1,8 +1,9 @@
 <template>
-
-  <HeroSection/>
+  <HeroSection />
+  <FooterSection/>
 </template>
 
 <script setup>
-import HeroSection from '@/components/HeroSection.vue';
+import FooterSection from "@/components/FooterSection.vue";
+import HeroSection from "@/components/HeroSection.vue";
 </script>

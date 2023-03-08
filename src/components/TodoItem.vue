@@ -1,98 +1,97 @@
 <template>
   <div class="todo-item">
-    <div  class="todo-item-left ">
-                    <input type="checkbox" v-model="completed" />
-                    <div
-                      v-if="!todo.editing"
-                      :class="{ completed: completed }"
-
-                     @dblclick="editTodo"
-                      class="todo-item-label mr-16 "
-                    >
-                      {{ title }}
-                    </div>
-                    <v-text-field
-                      v-else
-                      class="todo-item-edit ml-12"
-                      type="text"
-                      v-model="title"
-                      @blur="doneEdit"
-                      @keyup.enter="doneEdit"
-                      @keyup.esc="cancelEdit"
-                      v-focus
-                    />
-                    <v-card-action class="d-flex">
-                      <div class="remove-item "  @click="removeTodo(index)">
-                        <v-btn icon="mdi-delete" variant="text" />
-                      </div>
-                      <v-row justify="center">
-    <v-dialog
-      v-model="dialog"
-      persistent
-      width="auto"
-    >
-      <template v-slot:activator="{ props }">
-        <v-btn variant="text"
-          color="primary" class="ma-3" @click="editTodo"
-          v-bind="props" icon="mdi-pencil"
-        >
-
-        </v-btn>
-      </template>
-      <v-card class="px-3" max-width="600px ">
-        <v-card-title class="text-h5">
-Edit Task        </v-card-title>
-        <v-card-text>
-          <v-col cols="12"  >
-                <v-text-field class="w-100 px-2 " max-width="700px"
-                  label=""
-                  required v-model="title"
-                ></v-text-field>
-              </v-col>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="indigo-darken-1"
-            variant="text"
-            @click="dialog = false"
-          >
-           cancel
-          </v-btn>
-          <v-btn
-            color="red-darken-1"
-            variant="text"
-            @click="dialog = false"
-          >
-            save
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
-                    </v-card-action>
-                  </div>
-
+    <div class="todo-item-left">
+      <input type="checkbox" v-model="completed" />
+      <div
+        v-if="!todo.editing"
+        :class="{ completed: completed }"
+        @dblclick="editTodo"
+        class="todo-item-label ml-4"
+      >
+        {{ title }}
+      </div>
+      <v-text-field
+        v-else
+        class="todo-item-edit ml-12"
+        type="text"
+        v-model="title"
+        @blur="doneEdit"
+        @keyup.enter="doneEdit"
+        @keyup.esc="cancelEdit"
+        v-focus
+      />
+      <v-card-action class="d-flex">
+        <div class="remove-item" align="right" @click="removeTodo(index)">
+          <v-btn icon="mdi-delete" variant="text" />
+        </div>
+        <v-row justify="center">
+          <v-dialog v-model="dialog" persistent       width="600"
+ >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                variant="text"
+                color="primary"
+                class="ma-3"
+                @click="editTodo"
+                v-bind="props"
+                icon="mdi-pencil"
+              >
+              </v-btn>
+            </template>
+            <v-card class="px-2">
+              <v-card-title class="text-h5"> Edit Task </v-card-title>
+              <v-card-text>
+                <v-col cols="12">
+                  <v-text-field
+                    max-width="300px"
+                    label=""
+                    required
+                    v-model="title"
+                  ></v-text-field>
+                </v-col>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="indigo-darken-1"
+                  variant="text"
+                  @click="dialog = false"
+                >
+                  cancel
+                </v-btn>
+                <v-btn
+                  color="red-darken-1"
+                  variant="text"
+                  @click="dialog = false"
+                >
+                  save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </v-card-action>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props:{
-  todo:{
-    type:Object,
-    required:true
+  props: {
+    todo: {
+      type: Object,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
+    checkAll: {
+      type: Boolean,
+      required: true,
+    },
   },
-  index:{
-    type:Number,
-    required:true
-  },
-  checkAll:{
-    type:Boolean,
-    required:true
-  }
- },
- directives: {
+  directives: {
     focus: {
       inserted: function (el) {
         el.focus();
@@ -102,15 +101,16 @@ export default {
   data() {
     return {
       dialog: false,
-      'id': this.todo.id,
-        'title': this.todo.title,
-        'completed': this.todo.completed,
-        'editing':  this.todo.editing,
-        'BeforeEditCache':''
-    }},
-    methods:{
-      removeTodo(index) {
-      this.$emit('removeTodo', index);
+      id: this.todo.id,
+      title: this.todo.title,
+      completed: this.todo.completed,
+      editing: this.todo.editing,
+      BeforeEditCache: "",
+    };
+  },
+  methods: {
+    removeTodo(index) {
+      this.$emit("removeTodo", index);
     },
     editTodo() {
       this.beforeEditCache = this.title;
@@ -121,49 +121,44 @@ export default {
         this.title = this.beforeEditCache;
       }
       this.editing = false;
-      this.$emit('finishedEdit', {
-        'index':this.index,
-           'todo':{
-           'id': this.id,
-        'title': this.title,
-        'completed': this.completed,
-        'editing':  this.editing,
-
-           }
-
+      this.$emit("finishedEdit", {
+        index: this.index,
+        todo: {
+          id: this.id,
+          title: this.title,
+          completed: this.completed,
+          editing: this.editing,
+        },
       });
-
     },
     cancelEdit() {
       this.title = this.beforeEditCache;
       this.editing = false;
     },
+  },
+
+  watch: {
+    checkAll() {
+      this.completed = this.checkAll ? true : this.todo.completed;
     },
+    // checkAll(){
+    //   if(this.checkAll){
+    //     this.completed=true
+    //   }
+    //   else{
+    //     this.completed=this.todo.completed
 
-    watch:{
-      checkAll(){
-      this.completed= this.checkAll ?true :  this.todo.completed
-      }
-      // checkAll(){
-      //   if(this.checkAll){
-      //     this.completed=true
-      //   }
-      //   else{
-      //     this.completed=this.todo.completed
+    //   }
+    // }
+  },
 
-      //   }
-      // }
-    },
-
-  setup () {
-
-
-    return {}
-  }
-}
+  setup() {
+    return {};
+  },
+};
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css");
 
 ul {
@@ -198,15 +193,16 @@ ul li {
   padding-top: 14px;
   margin-bottom: 14px;
 }
-.todo-item-left { // later
-    display: flex;
-    align-items: center;
-  }
-  .todo-item-label {
-    padding: 10px;
-    border: 1px solid white;
-    margin-left: 12px;
-  }
+.todo-item-left {
+  // later
+  display: flex;
+  align-items: center;
+}
+.todo-item-label {
+  padding: 10px;
+  border: 1px solid white;
+  margin-left: 12px;
+}
 
 .error {
   background: rgb(255, 0, 43);
