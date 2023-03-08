@@ -18,14 +18,20 @@
                   :class="messageClass"
                   v-text="message"
                 ></div>
-                <v-btn
-                  type="submit"
-                  class="px-6"
-                  rounded="pill"
-                  color="purpleme"
-                >
-                  New Task
-                </v-btn>
+
+                <v-divider class="mx-4" inset vertical></v-divider>
+                <!-- <v-divider></v-divider> -->
+                <!-- <v-text-field
+        :loading="loading"
+        density="compact"
+        variant="text"
+        v-model.trim="searchValue"
+        label="Search Task"
+        append-inner-icon="mdi-magnify"
+        single-line
+        hide-details
+        @click:append-inner="onClick"
+      ></v-text-field> -->
                 <!-- <v-text-field class="px-2" clearable placeholder="New Task" name="Name" v-model.trim="Name"  variant="underlined" color="indigo"  /> -->
                 <v-text-field
                   class="px-2"
@@ -35,14 +41,23 @@
                   color="indigo"
                   v-model="newTodo"
                 />
+                  <v-btn
+                  type="submit"
+                  class="px-6"
+                  rounded="pill"
+                  color="purpleme"
+                >
+                  New Task
+                </v-btn>
                 <div
-                  v-for="(todo, index) in todosFiltered"
+                  v-for="(todo, index) in filteredList"
                   :key="todo.id"
                   class="todo-item"
                 >
-                <input type="checkbox" v-model="todo.completed">
+                  <input type="checkbox" v-model="todo.completed" />
                   <div
-                    v-if="!todo.editing" :class="{ completed : todo.completed }"
+                    v-if="!todo.editing"
+                    :class="{ completed: todo.completed }"
                     @dblclick="editTodo(todo)"
                     class="todo-item-label"
                   >
@@ -62,7 +77,6 @@
 
                   <div class="remove-item" @click="removeTodo(index)">
                     <v-btn icon="mdi-delete" />
-
                   </div>
                   <!-- <v-icon
                 icon="mdi-pencil"
@@ -70,27 +84,52 @@
                 >
 
                 </v-icon> -->
-
                 </div>
 
                 <div class="extra-container">
-      <div><label><input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos"> Check All</label></div>
-      <div>{{ remaining }} items left</div>
-    </div>
-    <div class="extra-container">
-      <!-- <div>
+                  <div>
+                    <label
+                      ><input
+                        type="checkbox"
+                        :checked="!anyRemaining"
+                        @change="checkAllTodos"
+                      />
+                      Check All</label
+                    >
+                  </div>
+                  <div>{{ remaining }} items left</div>
+                </div>
+                <div class="extra-container">
+                  <!-- <div>
         <v-btn class="bg-success" :class="{ active: filter == 'all' }" @click="filter = 'all'">All</v-btn>
         <v-btn :class="{ active: filter == 'active' }" @click="filter = 'active'">Active</v-btn>
         <v-btn :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Completed</v-btn>
       </div> -->
 
-      <div>
-        <transition name="fade">
-        <button v-if="showClearCompletedButton" @click="clearCompleted">Clear Completed</button>
-        </transition>
-      </div>
-
-    </div>
+                  <div>
+                    <transition name="fade">
+                      <button
+                        v-if="showClearCompletedButton"
+                        @click="clearCompleted"
+                      >
+                        Clear Completed
+                      </button>
+                    </transition>
+                  </div>
+                  <v-text-field
+                    class="bg-indigo-lighten-2"
+                    pills
+                    :loading="loading"
+                    density="compact"
+                    variant="text"
+                    v-model.trim="searchValue"
+                    label="Search Task"
+                    append-inner-icon="mdi-magnify"
+                    single-line
+                    hide-details
+                    @click:append-inner="onClick"
+                  ></v-text-field>
+                </div>
               </v-card-text>
             </v-form>
           </v-card>
@@ -112,6 +151,8 @@
 export default {
   data() {
     return {
+      loaded: false,
+      loading: false,
       message: "",
       messageClass: "",
       newTodo: "",
@@ -129,6 +170,12 @@ export default {
           completed: false,
           editing: false,
         },
+        {
+          id: 3,
+          title: "Watch course vue",
+          completed: false,
+          editing: false,
+        },
       ],
       Name: "",
 
@@ -138,35 +185,43 @@ export default {
   },
   computed: {
     remaining() {
-      return this.todos.filter(todo => !todo.completed).length
+      return this.todos.filter((todo) => !todo.completed).length;
     },
     anyRemaining() {
-      return this.remaining != 0
+      return this.remaining != 0;
     },
     todosFiltered() {
-      if (this.filter == 'all') {
-        return this.todos
-      } else if (this.filter == 'active') {
-        return this.todos.filter(todo => !todo.completed)
-      } else if (this.filter == 'completed') {
-        return this.todos.filter(todo => todo.completed)
+      if (this.filter == "all") {
+        return this.todos;
+      } else if (this.filter == "active") {
+        return this.todos.filter((todo) => !todo.completed);
+      } else if (this.filter == "completed") {
+        return this.todos.filter((todo) => todo.completed);
       }
-      return this.todos
+      return this.todos;
+    },
+    filteredList() {
+      return this.todos.filter((task) => {
+        return task.title
+          .toLowerCase()
+          .includes(this.searchValue.toLowerCase());
+      });
     },
     showClearCompletedButton() {
-      return this.todos.filter(todo => todo.completed).length > 0
-    }
+      return this.todos.filter((todo) => todo.completed).length > 0;
+    },
   },
   directives: {
     focus: {
       inserted: function (el) {
-        el.focus()
-      }
-    }
+        el.focus();
+      },
+    },
   },
   methods: {
     addTodo() {
       if (this.newTodo.trim().length == 0) {
+        this.showMsg('Please enter value field', true)
         return;
       }
       this.todos.push({
@@ -175,6 +230,7 @@ export default {
         completed: false,
         editing: false,
       });
+      this.showMsg('Task was Added')
       this.newTodo = "";
       this.idForTodo++;
     },
@@ -186,21 +242,21 @@ export default {
       todo.editing = true;
     },
     doneEdit(todo) {
-      if (todo.title.trim() == '') {
-        todo.title = this.beforeEditCache
+      if (todo.title.trim() == "") {
+        todo.title = this.beforeEditCache;
       }
-      todo.editing = false
+      todo.editing = false;
     },
     cancelEdit(todo) {
-      todo.title = this.beforeEditCache
-      todo.editing = false
+      todo.title = this.beforeEditCache;
+      todo.editing = false;
     },
     checkAllTodos() {
-      this.todos.forEach((todo) => todo.completed = event.target.checked)
+      this.todos.forEach((todo) => (todo.completed = event.target.checked));
     },
     clearCompleted() {
-      this.todos = this.todos.filter(todo => !todo.completed)
-    }
+      this.todos = this.todos.filter((todo) => !todo.completed);
+    },
     // addToList() {
     //   if (this.Name === '' ) {
     //     this.showMsg('Please enter value field', true)
@@ -214,34 +270,34 @@ export default {
 
     // },
 
-    // showMsg(message, isError = false, duration = 3000) {
-    //   if (isError)
-    //     this.messageClass = 'error'
-    //   else
-    //     this.messageClass = 'success'
+    showMsg(message, isError = false, duration = 3000) {
+      if (isError)
+        this.messageClass = 'error'
+      else
+        this.messageClass = 'success'
 
-    //   this.message = message
+      this.message = message
 
-    //   setTimeout(this.removeMsg, duration)
-    // },
+      setTimeout(this.removeMsg, duration)
+    },
 
-    // removeMsg() {
-    //   this.message = ''
-    //   this.messageClass = ''
-    // },
+    removeMsg() {
+      this.message = ''
+      this.messageClass = ''
+    },
   },
 };
 </script>
 <style lang="scss">
-  @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css");
 
 ul {
   list-style: none;
 }
 button {
-    font-size: 14px;
-    background-color: white;
-    appearance: none;
+  font-size: 14px;
+  background-color: white;
+  appearance: none;
 }
 .tod .remove-item {
   margin-left: 14px;
@@ -258,19 +314,19 @@ ul li {
   padding: 5px;
   margin: 5px;
 }
-.extra-container{
+.extra-container {
   display: flex;
-align-items: center;
-justify-content: space-between;
-font-size: 16px;
-border-top: 1px solid lightgrey;
-padding-top:14px ;
-margin-bottom:14px
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  border-top: 1px solid lightgrey;
+  padding-top: 14px;
+  margin-bottom: 14px;
 }
 .error {
   background: rgb(255, 0, 43);
 }
-.active{
+.active {
   background-color: lightgreen;
 }
 .success {
@@ -282,15 +338,17 @@ margin-bottom:14px
   align-items: center;
   justify-content: space-between;
 }
-.completed{
+.completed {
   text-decoration: line-through;
   color: grey;
 }
- // CSS Transitions
- .fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
-  }
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
+// CSS Transitions
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
