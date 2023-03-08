@@ -1,4 +1,5 @@
 <template>
+  <!--I use modal for edit task  -->
   <div class="todo-item">
     <div class="todo-item-left">
       <input type="checkbox" v-model="completed" />
@@ -21,57 +22,55 @@
         v-focus
       />
 
-        <div class=" d-flex justify-end">
-          <div class="remove-item  " @click="removeTodo(index)">
-            <v-btn   icon="mdi-delete" align="right" variant="text" />
-          </div>
-          <v-row >
-            <v-dialog v-model="dialog" persistent       width="600"
-           >
-              <template v-slot:activator="{ props }">
-                <v-btn
-                  variant="text"
-                  color="primary"
-                  class="ma-3"
-                  @click="editTodo"
-                  v-bind="props"
-                  icon="mdi-pencil"
-                >
-                </v-btn>
-              </template>
-              <v-card class="px-2">
-                <v-card-title class="text-h5"> Edit Task </v-card-title>
-                <v-card-text>
-                  <v-col cols="12">
-                    <v-text-field
-                      max-width="300px"
-                      label=""
-                      required
-                      v-model="title"
-                    ></v-text-field>
-                  </v-col>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="red-darken-1"
-                    variant="text"
-                    @click="dialog = false"
-                  >
-                    cancel
-                  </v-btn>
-                  <v-btn
-                    color="indigo-darken-1"
-                    variant="text"
-                    @click="dialog = false"
-                  >
-                    save
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-row>
+        <div class="remove-item  " @click="removeTodo(index)">
+          <v-btn   icon="mdi-delete" align="right" variant="text" />
         </div>
+        <v-row >
+          <v-dialog v-model="dialog" persistent       width="600"
+ >
+            <template v-slot:activator="{ props }">
+              <v-btn
+                variant="text"
+                color="primary"
+                class="ma-3"
+                @click="editTodo"
+                v-bind="props"
+                icon="mdi-pencil"
+              >
+              </v-btn>
+            </template>
+            <v-card class="px-2">
+              <v-card-title class="text-h5"> Edit Task </v-card-title>
+              <v-card-text>
+                <v-col cols="12">
+                  <v-text-field
+                    max-width="300px"
+                    label=""
+                    required
+                    v-model="title"
+                  ></v-text-field>
+                </v-col>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="red-darken-1"
+                  variant="text"
+                  @click="dialog = false"
+                >
+                  cancel
+                </v-btn>
+                <v-btn
+                  color="indigo-darken-1"
+                  variant="text"
+                  @click="dialog = false"
+                >
+                  save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
 
     </div>
   </div>

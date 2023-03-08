@@ -168,7 +168,7 @@ export default {
       }
       return this.todos;
     },
-    //filteredList refers method for search 
+    //filteredList refers method for search
     filteredList() {
       return this.todos.filter((task) => {
         return task.title
@@ -176,6 +176,7 @@ export default {
           .includes(this.searchValue.toLowerCase());
       });
     },
+    //
     showClearCompletedButton() {
       return this.todos.filter((todo) => todo.completed).length > 0;
     },
@@ -188,6 +189,7 @@ export default {
     },
   },
   methods: {
+    //addtodo is method for add task and i call showMsg for show suitable message
     addTodo() {
       if (this.newTodo.trim().length == 0) {
         this.showMsg("Please enter value field", true);
@@ -203,6 +205,7 @@ export default {
       this.newTodo = "";
       this.idForTodo++;
     },
+    //removeTodo is method for remove task
     removeTodo(index) {
       this.todos.splice(index, 1);
     },
@@ -220,9 +223,12 @@ export default {
     //   todo.title = this.beforeEditCache;
     //   todo.editing = false;
     // },
+      // /checkAllTodos is method for check on complete task
     checkAllTodos() {
       this.todos.forEach((todo) => (todo.completed = event.target.checked));
     },
+
+    //clearCompleted is method clear all completed
     clearCompleted() {
       this.todos = this.todos.filter((todo) => !todo.completed);
     },

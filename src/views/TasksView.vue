@@ -1,16 +1,9 @@
 <template>
-
-<TasksSection/>
-<!-- <AllTaskSection/> -->
+  <TasksSection />
 </template>
 
-<script setup >
-// import AllTaskSection from '@/components/AllTaskSection.vue';
-import TasksSection from '@/components/TasksSection.vue';
-
-
+<script setup>
+import TasksSection from "@/components/TasksSection.vue";
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
