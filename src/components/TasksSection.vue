@@ -67,7 +67,6 @@
         <v-btn :class="{ active: filter == 'active' }" @click="filter = 'active'">Active</v-btn>
         <v-btn :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Completed</v-btn>
       </div> -->
-
                   <div>
                     <transition name="fade">
                       <v-btn
@@ -98,7 +97,6 @@
           </v-card>
         </v-col>
         <!-- <input type="search" placeholder="Name" v-model.trim="searchValue"> -->
-
         <!-- <ul class="items">
         <li >
         </li>
@@ -130,13 +128,13 @@ export default {
         },
         {
           id: 2,
-          title: "Take over world",
+          title: "Take over world in test",
           completed: false,
           editing: false,
         },
         {
           id: 3,
-          title: "Watch course vue",
+          title: "Watch course in vuejs",
           completed: false,
           editing: false,
         },
