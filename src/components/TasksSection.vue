@@ -12,6 +12,7 @@
             <v-card-title></v-card-title>
             <v-form @submit.prevent="addTodo">
               <v-card-text>
+                <!-- add Message if error with enter Task or success enter  -->
                 <div
                   v-if="message"
                   class="msg"
@@ -20,7 +21,7 @@
                 ></div>
 
                 <v-divider class="mx-4" inset vertical></v-divider>
-
+                <!-- add text field for add task  -->
                 <v-text-field
                   class="px-2"
                   clearable
@@ -37,6 +38,7 @@
                 >
                   New Task
                 </v-btn>
+                <!-- add V-for because show all tasks  -->
                 <todo-item
                   v-for="(todo, index) in filteredList"
                   :key="todo.id"
@@ -47,7 +49,7 @@
                   :checkAll="!anyRemaining"
                 >
                 </todo-item>
-
+                <!-- add checkbox for complete all task  -->
                 <div class="extra-container">
                   <div>
                     <label
@@ -59,6 +61,7 @@
                       Check All</label
                     >
                   </div>
+                  <!-- remaining refers number task not completed -->
                   <div>{{ remaining }} items left</div>
                 </div>
                 <div class="extra-container">
@@ -68,6 +71,7 @@
         <v-btn :class="{ active: filter == 'completed' }" @click="filter = 'completed'">Completed</v-btn>
       </div> -->
                   <div>
+                   <!-- add button  Clear Completed when i find task   Completed -->
                     <transition name="fade">
                       <v-btn
                         class="error"
@@ -78,6 +82,7 @@
                       </v-btn>
                     </transition>
                   </div>
+                  <!-- add text-field search when if you search about any task  -->
                   <v-text-field
                     class="bg-indigo-lighten-2 w-50"
                     pills
@@ -146,6 +151,7 @@ export default {
     };
   },
   computed: {
+
     remaining() {
       return this.todos.filter((todo) => !todo.completed).length;
     },
@@ -162,6 +168,7 @@ export default {
       }
       return this.todos;
     },
+    //filteredList refers method for search 
     filteredList() {
       return this.todos.filter((task) => {
         return task.title

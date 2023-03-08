@@ -1,6 +1,6 @@
 <template>
   <HeroSection />
-  <StudentInfo/>
+  <StudentInfo />
 </template>
 
 <script setup>
