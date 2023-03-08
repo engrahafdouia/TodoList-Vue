@@ -1,9 +1,10 @@
 <template>
   <HeroSection />
-  <FooterSection/>
+  <StudentInfo/>
 </template>
 
 <script setup>
-import FooterSection from "@/components/FooterSection.vue";
+import StudentInfo from "@/components/StudentInfo.vue";
+
 import HeroSection from "@/components/HeroSection.vue";
 </script>

@@ -6,7 +6,7 @@
         v-if="!todo.editing"
         :class="{ completed: completed }"
         @dblclick="editTodo"
-        class="todo-item-label ml-4"
+        class="todo-item-label "
       >
         {{ title }}
       </div>
@@ -21,8 +21,8 @@
         v-focus
       />
       <v-card-action class="d-flex">
-        <div class="remove-item" align="right" @click="removeTodo(index)">
-          <v-btn icon="mdi-delete" variant="text" />
+        <div class="remove-item  " @click="removeTodo(index)">
+          <v-btn   icon="mdi-delete" variant="text" />
         </div>
         <v-row justify="center">
           <v-dialog v-model="dialog" persistent       width="600"
